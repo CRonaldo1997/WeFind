@@ -235,10 +235,6 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-//                        String username = userName.getText().toString();
-//                        String email = signUpEmail.getText().toString();
-//                        uploadToFirebase(username, email, year, zodiacSign, gender, imageUri);
-
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
