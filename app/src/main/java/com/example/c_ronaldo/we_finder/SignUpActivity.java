@@ -48,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         genderSpinner = (Spinner)this.findViewById(R.id.mSpinnerGender);
         userName = (EditText)this.findViewById(R.id.mUsername);
         signUpEmail = (EditText)this.findViewById(R.id.mEmailSU);
-        signUpPswd = (EditText)this.findViewById(R.id.mPassword);
+        signUpPswd = (EditText)this.findViewById(R.id.mPasswordSU);
         repeatPswd = (EditText)this.findViewById(R.id.mPasswordRepeat);
         portrait = (ImageView)this.findViewById(R.id.mPhotoImageView);
 

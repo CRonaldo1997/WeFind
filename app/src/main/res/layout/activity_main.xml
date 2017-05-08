@@ -7,44 +7,44 @@
     tools:context="com.example.c_ronaldo.we_finder.MainActivity">
 
     <EditText
-        android:id="@+id/mPassword"
+        android:id="@+id/password"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/mEmail"
+        app:layout_constraintTop_toBottomOf="@+id/email"
         tools:layout_editor_absoluteX="8dp" />
 
     <EditText
-        android:id="@+id/mEmail"
+        android:id="@+id/email"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="242dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp" />
 
     <Button
-        android:id="@+id/mSingInBotton"
+        android:id="@+id/signin_button"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="sign in"
-        app:layout_constraintTop_toBottomOf="@+id/mPassword"
+        android:text="@string/sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/password"
         tools:layout_editor_absoluteX="8dp" />
 
     <Button
-        android:id="@+id/mSignUpBotton"
+        android:id="@+id/signup_button"
         android:onClick="onSignUpClicked"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="sign up"
-        app:layout_constraintTop_toBottomOf="@+id/mSingInBotton"
+        android:text="@string/sign_up"
+        app:layout_constraintTop_toBottomOf="@+id/signin_button"
         tools:layout_editor_absoluteX="8dp" />
 
     <ImageView
