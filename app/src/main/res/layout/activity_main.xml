@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.c_ronaldo.we_finder.MainActivity">
+
+    <EditText
+        android:id="@+id/mPassword"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/mEmail"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <EditText
+        android:id="@+id/mEmail"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="242dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <Button
+        android:id="@+id/mSingInBotton"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="sign in"
+        app:layout_constraintTop_toBottomOf="@+id/mPassword"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <Button
+        android:id="@+id/mSignUpBotton"
+        android:onClick="onSignUpClicked"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="sign up"
+        app:layout_constraintTop_toBottomOf="@+id/mSingInBotton"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="368dp"
+        android:layout_height="226dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image1" />
+
+</android.support.constraint.ConstraintLayout>
