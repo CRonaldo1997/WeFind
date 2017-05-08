@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String userEmail = mEmail.getText().toString();
                 String userPassword = mPassword.getText().toString();
                 signIn(userEmail, userPassword);
+                break;
+            case R.id.signup_button:
+                go(SIGNUP);
+                break;
         }
     }
 
