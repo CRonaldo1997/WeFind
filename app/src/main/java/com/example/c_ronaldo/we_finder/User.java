@@ -1,9 +1,6 @@
 package com.example.c_ronaldo.we_finder;
 
 
-import android.widget.ArrayAdapter;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 
