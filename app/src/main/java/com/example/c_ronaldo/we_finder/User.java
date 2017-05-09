@@ -11,20 +11,16 @@ public class User {
     public String zodiac;
     public String gender;
     public String uri;
-//    public HashSet<String> like;
-    public ArrayList<String> like;
 
     public User() {};
 
-    public User(String username, String email, String year, String zodiac, String gender,
-                String uri, ArrayList<String> like) {
+    public User(String username, String email, String year, String zodiac, String gender, String uri) {
         this.username = username;
         this.email = email;
         this.year = year;
         this.zodiac = zodiac;
         this.gender = gender;
         this.uri = uri;
-        this.like = like;
     }
 
     public String getUsername() {
@@ -69,17 +65,5 @@ public class User {
 
     public String getUrl() {
         return uri;
-    }
-
-    public void setUrl(String newUri) {
-        uri = newUri;
-    }
-
-    public ArrayList<String> getLike() {
-        return like;
-    }
-
-    public void setLike(ArrayList<String> newLike) {
-        like = newLike;
     }
 }

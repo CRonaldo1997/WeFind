@@ -341,8 +341,7 @@ public class SignUpActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        database.setPersistenceEnabled(true);   // Enable offline writing
         DatabaseReference userTable = database.getReference("users");
-        User currentUser = new User(username, email, year, zodiac, gender, uri,
-                                    new ArrayList<String>());
+        User currentUser = new User(username, email, year, zodiac, gender, uri);
         Log.d(TAG, "User of interest: " + currentUser);
 //        String userKey = userTable.push().getKey();
 //        userTable.child(userKey).setValue(currentUser);
