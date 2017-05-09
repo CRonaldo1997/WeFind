@@ -40,20 +40,20 @@ public class SignUpActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private final String TITLE = "Sign Up";
 
-    private Spinner yearSpinner;
-    private Spinner signSpinner;
-    private Spinner genderSpinner;
-    private EditText userName;
-    private EditText signUpEmail;
-    private EditText signUpPswd;
-    private EditText repeatPswd;
-    private ImageView portrait;
+    private Spinner mYearSpinner;
+    private Spinner mZodiacSpinner;
+    private Spinner mGenderSpinner;
+    private EditText mUsername;
+    private EditText mEmail;
+    private EditText mPassword;
+    private EditText mRepeatPassword;
+    private ImageView mProfile;
     private String zodiacSign;
     private String gender;
     private String year;
-    private ArrayAdapter<String> adapterYear;
-    private ArrayAdapter<String> adapterSign;
-    private ArrayAdapter<String> adapterGender;
+    private ArrayAdapter<String> yearAdapter;
+    private ArrayAdapter<String> zodiacAdapter;
+    private ArrayAdapter<String> genderAdapter;
     private List<String> yearList = new ArrayList<>();
     private String[] signList = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Pisces", "Aquarius",
                                  "Libra", "Sagittarius", "Scorpio", "Capricorn", "Virgo"};
@@ -79,14 +79,14 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         setTitle(TITLE);
 
-        yearSpinner = (Spinner)this.findViewById(R.id.mSpinnerYear);
-        signSpinner = (Spinner)this.findViewById(R.id.mSpinnerSign);
-        genderSpinner = (Spinner)this.findViewById(R.id.mSpinnerGender);
-        userName = (EditText)this.findViewById(R.id.mUsername);
-        signUpEmail = (EditText)this.findViewById(R.id.mEmailSU);
-        signUpPswd = (EditText)this.findViewById(R.id.mPasswordSU);
-        repeatPswd = (EditText)this.findViewById(R.id.mPasswordRepeat);
-        portrait = (ImageView)this.findViewById(R.id.mPhotoImageView);
+        mYearSpinner = (Spinner)this.findViewById(R.id.year_spinner);
+        mZodiacSpinner = (Spinner)this.findViewById(R.id.zodiac_spinner);
+        mGenderSpinner = (Spinner)this.findViewById(R.id.gender_spinner);
+        mUsername = (EditText)this.findViewById(R.id.username);
+        mEmail = (EditText)this.findViewById(R.id.email);
+        mPassword = (EditText)this.findViewById(R.id.password);
+        mRepeatPassword = (EditText)this.findViewById(R.id.repeat_password);
+        mProfile = (ImageView)this.findViewById(R.id.profile_picture);
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -108,9 +108,9 @@ public class SignUpActivity extends AppCompatActivity {
         hasImage = false;
 
         generateYearList();
-        yearSpinnerAdapter();
-        signSpinnerAdapter();
-        genderSpinnerAdapter();
+        setYearAdapter();
+        setZodiacAdapter();
+        setGenderAdapter();
 
         //show progress
         progress = new ProgressDialog(this);
@@ -138,9 +138,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void saveUserMenuClicked(MenuItem selectedMenu){
         Log.i("menuLog","saveMenuClicked!");
-//        createAccount(signUpEmail.getText().toString(), signUpPswd.getText().toString());
-        username = userName.getText().toString();
-        email = signUpEmail.getText().toString();
+//        createAccount(mEmail.getText().toString(), mPassword.getText().toString());
+        username = mUsername.getText().toString();
+        email = mEmail.getText().toString();
         if (username.isEmpty() || email.isEmpty() || year.isEmpty() || zodiacSign.isEmpty() ||
                 gender.isEmpty() || !hasImage) {
             Log.d(TAG, "Some fields missing\nNot creating new user");
@@ -162,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Log.i("myuri",imageUri.toString());
                 Toast.makeText(getApplication(),"Upload done!",Toast.LENGTH_LONG).show();
 
-                String password = signUpPswd.getText().toString();
+                String password = mPassword.getText().toString();
                 if (!createAccount(email, password)) {
                     Log.d(TAG, "Create account failed.");
                 } else {
@@ -173,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
                     setResult(RESULT_OK, toPassBack);
 
                     Log.d(TAG, "Adding current user info to Firebase Database");
-                    upLoadToFirebase(username, email, year, zodiacSign, gender,downloadUri.toString());
+                    upLoadToFirebase(username, email, year, zodiacSign, gender, downloadUri.toString());
                     progress.dismiss();
                     Toast.makeText(getApplication(), "User Created on Firebase. Please sign in.",
                             Toast.LENGTH_SHORT).show();
@@ -182,7 +182,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-//        String password = signUpPswd.getText().toString();
+//        String password = mPassword.getText().toString();
 //        if (!createAccount(email, password)) {
 //            Log.d(TAG, "Create account failed.");
 //        } else {
@@ -218,7 +218,7 @@ public class SignUpActivity extends AppCompatActivity {
             Log.i("forImage","whereIsImage");
             imageUri = data.getData();
             Log.i("forImage",imageUri.toString());
-            portrait.setImageURI(imageUri);
+            mProfile.setImageURI(imageUri);
         }
     }
 
@@ -229,11 +229,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public void yearSpinnerAdapter(){
-        adapterYear = new ArrayAdapter<>(
+    public void setYearAdapter(){
+        yearAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, yearList);
-        yearSpinner.setAdapter(adapterYear);
-        yearSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+        mYearSpinner.setAdapter(yearAdapter);
+        mYearSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -247,11 +247,11 @@ public class SignUpActivity extends AppCompatActivity {
             }});
     }
 
-    public void signSpinnerAdapter(){
-        adapterSign = new ArrayAdapter<>(
+    public void setZodiacAdapter(){
+        zodiacAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, signList);
-        signSpinner.setAdapter(adapterSign);
-        signSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+        mZodiacSpinner.setAdapter(zodiacAdapter);
+        mZodiacSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -265,11 +265,11 @@ public class SignUpActivity extends AppCompatActivity {
             }});
     }
 
-    public void genderSpinnerAdapter(){
-        adapterGender = new ArrayAdapter<>(
+    public void setGenderAdapter(){
+        genderAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, genderList);
-        genderSpinner.setAdapter(adapterGender);
-        genderSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+        mGenderSpinner.setAdapter(genderAdapter);
+        mGenderSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -309,29 +309,29 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean validateForm() {
         boolean valid = true;
 
-        String email = signUpEmail.getText().toString();
+        String email = mEmail.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            signUpEmail.setError("Email Address Required.");
+            mEmail.setError("Email Address Required.");
             valid = false;
         } else {
-            signUpEmail.setError(null);
+            mEmail.setError(null);
         }
 
-        String password = signUpPswd.getText().toString();
+        String password = mPassword.getText().toString();
         if (TextUtils.isEmpty(password) || password.length() < 6) {
-            signUpPswd.setError("Password must have at least 6 characters.");
+            mPassword.setError("Password must have at least 6 characters.");
             valid = false;
         } else {
-            signUpPswd.setError(null);
+            mPassword.setError(null);
         }
 
-        String rePassword = repeatPswd.getText().toString();
+        String rePassword = mRepeatPassword.getText().toString();
         if (TextUtils.isEmpty(rePassword) || rePassword.length() < 6 ||
                 !rePassword.equals(password)) {
-            repeatPswd.setError("Password doesn't not match");
+            mRepeatPassword.setError("Password doesn't not match");
             valid = false;
         } else {
-            signUpPswd.setError(null);
+            mPassword.setError(null);
         }
         return valid;
     }

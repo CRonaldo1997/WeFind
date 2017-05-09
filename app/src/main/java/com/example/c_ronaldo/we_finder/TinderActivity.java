@@ -28,18 +28,21 @@ import java.util.List;
 public class TinderActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private final String TITLE = "WeFinder";
-    ImageView portraitImageView;
-    DatabaseReference firebaseRef;
-    String urlStr;
-    List<String> urlList = new ArrayList<>();
-    List<String> nameList = new ArrayList<>();
-    int iThClick;
-    int iMax;
-    ProgressDialog loadUserProgress;
-    ProgressDialog loadPhotoProgress;
+
+    private ImageView mUserImage;
+    private String urlStr;
+    private List<String> urlList = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>();
+    private int iThClick;
+    private int iMax;
+
+    private ProgressDialog loadUserProgress;
+    private ProgressDialog loadPhotoProgress;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private DatabaseReference firebaseRef;
 
     private String currentEmail;
     private String currentUser;
@@ -49,8 +52,9 @@ public class TinderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tinder);
         setTitle(TITLE);
+
         iThClick = 0;
-        portraitImageView = (ImageView)this.findViewById(R.id.mPortraitImageView);
+        mUserImage = (ImageView)this.findViewById(R.id.user_image);
         loadUserProgress = new ProgressDialog(this);
         loadPhotoProgress = new ProgressDialog(this);
 
@@ -74,8 +78,6 @@ public class TinderActivity extends AppCompatActivity {
         loadPortrait();
         loadUserProgress.setMessage("Loading user list, please wait");
         loadUserProgress.show();
-
-
     }
 
     @Override
@@ -113,7 +115,8 @@ public class TinderActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     String targetUsername = postSnapshot.child("username").getValue().toString();
-                    String targetEmail = postSnapshot.child("email").getValue().toString().toLowerCase();
+                    String targetEmail = postSnapshot.child("email")
+                                                     .getValue().toString().toLowerCase();
                     Log.d("loadPortrait", "targetEmail = " + targetEmail);
                     Log.d("loadPortrait", "currentEmail = " + currentEmail);
                     if (targetEmail.equals(currentEmail)) {
@@ -131,7 +134,8 @@ public class TinderActivity extends AppCompatActivity {
                     iMax = urlList.size();
                 }
                 loadUserProgress.dismiss();
-                Picasso.with(TinderActivity.this).load(urlList.get(iThClick)).fit().centerCrop().into(portraitImageView);
+                Picasso.with(TinderActivity.this).load(urlList.get(iThClick))
+                                                 .fit().centerCrop().into(mUserImage);
                 iThClick++;
             }
 
@@ -146,7 +150,7 @@ public class TinderActivity extends AppCompatActivity {
         loadPhotoProgress.setMessage("Loading photos");
         if (iThClick < iMax) {
             String url_i = urlList.get(iThClick);
-            Picasso.with(TinderActivity.this).load(url_i).fit().centerCrop().into(portraitImageView);
+            Picasso.with(TinderActivity.this).load(url_i).fit().centerCrop().into(mUserImage);
             loadPhotoProgress.dismiss();
 //            iThClick++;
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -166,7 +170,7 @@ public class TinderActivity extends AppCompatActivity {
     public void onDislikeClicked(View button){
         if (iThClick < iMax) {
             String url_i = urlList.get(iThClick);
-            Picasso.with(TinderActivity.this).load(url_i).fit().centerCrop().into(portraitImageView);
+            Picasso.with(TinderActivity.this).load(url_i).fit().centerCrop().into(mUserImage);
             loadPhotoProgress.dismiss();
             iThClick++;
         } else {
