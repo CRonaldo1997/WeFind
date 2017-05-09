@@ -1,5 +1,6 @@
 package com.example.c_ronaldo.we_finder;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -20,42 +21,57 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     private final String TITLE = "Sign Up";
 
-    Spinner yearSpinner;
-    Spinner signSpinner;
-    Spinner genderSpinner;
-    EditText userName;
-    EditText signUpEmail;
-    EditText signUpPswd;
-    EditText repeatPswd;
-    ImageView portrait;
-    String zodiacSign;
-    String gender;
-    String year;
-    ArrayAdapter<String> adapterYear;
-    ArrayAdapter<String> adapterSign;
-    ArrayAdapter<String> adapterGender;
-    List<String> yearList = new ArrayList<>();
-    String[] signList = {"Aries", "Taurus", "Gemini","Cancer","Leo","Pisces","Aquarius","Libra","Sagittarius", "Scorpio", "Capricorn","Virgo"};
-    String[] genderList = {"Male","Female"};
+    private Spinner yearSpinner;
+    private Spinner signSpinner;
+    private Spinner genderSpinner;
+    private EditText userName;
+    private EditText signUpEmail;
+    private EditText signUpPswd;
+    private EditText repeatPswd;
+    private ImageView portrait;
+    private String zodiacSign;
+    private String gender;
+    private String year;
+    private ArrayAdapter<String> adapterYear;
+    private ArrayAdapter<String> adapterSign;
+    private ArrayAdapter<String> adapterGender;
+    private List<String> yearList = new ArrayList<>();
+    private String[] signList = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Pisces", "Aquarius",
+                                 "Libra", "Sagittarius", "Scorpio", "Capricorn", "Virgo"};
+    private String[] genderList = {"Male", "Female"};
     private static final int PICK_IMAGE  = 666;
-    Uri imageUri;
+    private Uri imageUri;
+    public static Uri downloadUri;
+
+    private String username;
+    private String email;
+    
+    private Boolean hasImage;
+
+    ProgressDialog progress;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    StorageReference mStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +103,17 @@ public class SignUpActivity extends AppCompatActivity {
             }
         };
 
+        mStorage = FirebaseStorage.getInstance().getReference();
+
+        hasImage = false;
+
         generateYearList();
         yearSpinnerAdapter();
         signSpinnerAdapter();
         genderSpinnerAdapter();
+
+        //show progress
+        progress = new ProgressDialog(this);
     }
 
     @Override
@@ -116,31 +139,66 @@ public class SignUpActivity extends AppCompatActivity {
     public void saveUserMenuClicked(MenuItem selectedMenu){
         Log.i("menuLog","saveMenuClicked!");
 //        createAccount(signUpEmail.getText().toString(), signUpPswd.getText().toString());
-        String username = userName.getText().toString();
-        String email = signUpEmail.getText().toString();
+        username = userName.getText().toString();
+        email = signUpEmail.getText().toString();
         if (username.isEmpty() || email.isEmpty() || year.isEmpty() || zodiacSign.isEmpty() ||
-                gender.isEmpty()) {
+                gender.isEmpty() || !hasImage) {
             Log.d(TAG, "Some fields missing\nNot creating new user");
             String msg = "Please complete the required fields";
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             return;
         }
-        String password = signUpPswd.getText().toString();
-        if (!createAccount(email, password)) {
-            Log.d(TAG, "Create account failed.");
-        } else {
-            Log.d(TAG, "Create account succeeded");
-            Intent toPassBack = getIntent();
-            toPassBack.putExtra("email", email);
-            toPassBack.putExtra("password", password);
-            setResult(RESULT_OK, toPassBack);
 
-            Log.d(TAG, "Adding current user info to Firebase Database");
-            upLoadToFirebase(username, email, year, zodiacSign, gender);
-            Toast.makeText(this, "User Created on Firebase. Please sign in.",
-                    Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        progress.setMessage("Adding user to Firebase, please wait");
+        progress.show();
+
+        StorageReference firepath = mStorage.child("Photos").child(username);
+        firepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                downloadUri = taskSnapshot.getDownloadUrl();
+                Log.i("myuri",downloadUri.toString());
+                Log.i("myuri",imageUri.toString());
+                Toast.makeText(getApplication(),"Upload done!",Toast.LENGTH_LONG).show();
+
+                String password = signUpPswd.getText().toString();
+                if (!createAccount(email, password)) {
+                    Log.d(TAG, "Create account failed.");
+                } else {
+                    Log.d(TAG, "Create account succeeded");
+                    Intent toPassBack = getIntent();
+                    toPassBack.putExtra("email", email);
+                    toPassBack.putExtra("password", password);
+                    setResult(RESULT_OK, toPassBack);
+
+                    Log.d(TAG, "Adding current user info to Firebase Database");
+                    upLoadToFirebase(username, email, year, zodiacSign, gender,downloadUri.toString());
+                    progress.dismiss();
+                    Toast.makeText(getApplication(), "User Created on Firebase. Please sign in.",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
+//        String password = signUpPswd.getText().toString();
+//        if (!createAccount(email, password)) {
+//            Log.d(TAG, "Create account failed.");
+//        } else {
+//            Log.d(TAG, "Create account succeeded");
+//            Intent toPassBack = getIntent();
+//            toPassBack.putExtra("email", email);
+//            toPassBack.putExtra("password", password);
+//            setResult(RESULT_OK, toPassBack);
+//
+//            Log.d(TAG, "Adding current user info to Firebase Database");
+//            upLoadToFirebase(username, email, year, zodiacSign, gender);
+//            Toast.makeText(this, "User Created on Firebase. Please sign in.",
+//                    Toast.LENGTH_SHORT).show();
+//            finish();
+//        }
+
     }
 
     public void onUploadPortraitClicked(View button){
@@ -155,7 +213,8 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode,int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            hasImage = true;
             Log.i("forImage","whereIsImage");
             imageUri = data.getData();
             Log.i("forImage",imageUri.toString());
@@ -278,11 +337,13 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void upLoadToFirebase(String username, String email, String year, String zodiac,
-                                  String gender) {
+                                  String gender, String uri) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);   // Enable offline writing
+//        database.setPersistenceEnabled(true);   // Enable offline writing
         DatabaseReference userTable = database.getReference("users");
-        User currentUser = new User(username, email, year, zodiac, gender);
+        User currentUser = new User(username, email, year, zodiac, gender, uri,
+                                    new ArrayList<String>());
+        Log.d(TAG, "User of interest: " + currentUser);
 //        String userKey = userTable.push().getKey();
 //        userTable.child(userKey).setValue(currentUser);
         userTable.child(username).setValue(currentUser);

@@ -1,8 +1,11 @@
 package com.example.c_ronaldo.we_finder;
 
-/**
- * Created by meng_ on 5/8/2017.
- */
+
+import android.widget.ArrayAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class User {
     public String username;
@@ -10,15 +13,21 @@ public class User {
     public String year;
     public String zodiac;
     public String gender;
+    public String uri;
+//    public HashSet<String> like;
+    public ArrayList<String> like;
 
     public User() {};
 
-    public User(String username, String email, String year, String zodiac, String gender) {
+    public User(String username, String email, String year, String zodiac, String gender,
+                String uri, ArrayList<String> like) {
         this.username = username;
         this.email = email;
         this.year = year;
         this.zodiac = zodiac;
         this.gender = gender;
+        this.uri = uri;
+        this.like = like;
     }
 
     public String getUsername() {
@@ -36,6 +45,7 @@ public class User {
     public void setEmail(String newEmail) {
         username = newEmail;
     }
+
     public String getYear() {
         return year;
     }
@@ -43,6 +53,7 @@ public class User {
     public void setYear(String newYear) {
         username = newYear;
     }
+
     public String getZodiac() {
         return zodiac;
     }
@@ -50,6 +61,7 @@ public class User {
     public void setZodiac(String newZodiac) {
         username = newZodiac;
     }
+
     public String getGender() {
         return gender;
     }
@@ -58,4 +70,19 @@ public class User {
         username = newGender;
     }
 
+    public String getUrl() {
+        return uri;
+    }
+
+    public void setUrl(String newUri) {
+        uri = newUri;
+    }
+
+    public ArrayList<String> getLike() {
+        return like;
+    }
+
+    public void setLike(ArrayList<String> newLike) {
+        like = newLike;
+    }
 }
