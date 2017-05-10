@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private final String TITLE = "WeFinder";
+    private final String TITLE = "WeFind";
     private final String TAG = this.getClass().getSimpleName();
 
     private static final int SIGNIN = 0;

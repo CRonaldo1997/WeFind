@@ -2,6 +2,7 @@ package com.example.c_ronaldo.we_finder;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,15 +58,16 @@ public class SignUpActivity extends AppCompatActivity {
     private ArrayAdapter<String> genderAdapter;
     private List<String> yearList = new ArrayList<>();
     private String[] signList = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Pisces", "Aquarius",
-                                 "Libra", "Sagittarius", "Scorpio", "Capricorn", "Virgo"};
+            "Libra", "Sagittarius", "Scorpio", "Capricorn", "Virgo"};
     private String[] genderList = {"Male", "Female"};
     private static final int PICK_IMAGE  = 666;
+    private static final int CAMERA_REQUEST_CODE = 999;
     private Uri imageUri;
     public static Uri downloadUri;
 
     private String username;
     private String email;
-    
+
     private Boolean hasImage;
 
     ProgressDialog progress;
@@ -148,23 +152,38 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        progress.setMessage("Adding user to Firebase, please wait");
-        progress.show();
+//        progress.setMessage("Adding user to Firebase, please wait");
+//        progress.show();
 
         StorageReference firepath = mStorage.child("Photos").child(username);
-        firepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+        //Try to upload bitmap
+        mProfile.setDrawingCacheEnabled(true);
+        mProfile.buildDrawingCache();
+        Bitmap bitmap = mProfile.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = firepath.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                downloadUri = taskSnapshot.getDownloadUrl();
-                Log.i("myuri",downloadUri.toString());
-                Log.i("myuri",imageUri.toString());
-                Toast.makeText(getApplication(),"Upload done!",Toast.LENGTH_LONG).show();
 
                 String password = mPassword.getText().toString();
                 if (!createAccount(email, password)) {
                     Log.d(TAG, "Create account failed.");
                 } else {
+                    progress.setMessage("Adding user to Firebase, please wait");
+                    progress.show();
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    Toast.makeText(getApplication(),"Upload done!",Toast.LENGTH_LONG).show();
                     Log.d(TAG, "Create account succeeded");
                     Intent toPassBack = getIntent();
                     toPassBack.putExtra("email", email);
@@ -180,7 +199,37 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
+//
+//        firepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                downloadUri = taskSnapshot.getDownloadUrl();
+//                Log.i("myuri",downloadUri.toString());
+//                Log.i("myuri",imageUri.toString());
+//                Toast.makeText(getApplication(),"Upload done!",Toast.LENGTH_LONG).show();
+//
+//                String password = mPassword.getText().toString();
+//                if (!createAccount(email, password)) {
+//                    Log.d(TAG, "Create account failed.");
+//                } else {
+//                    Log.d(TAG, "Create account succeeded");
+//                    Intent toPassBack = getIntent();
+//                    toPassBack.putExtra("email", email);
+//                    toPassBack.putExtra("password", password);
+//                    setResult(RESULT_OK, toPassBack);
+//
+//                    Log.d(TAG, "Adding current user info to Firebase Database");
+//                    upLoadToFirebase(username, email, year, zodiacSign, gender, downloadUri.toString());
+//                    progress.dismiss();
+//                    Toast.makeText(getApplication(), "User Created on Firebase. Please sign in.",
+//                            Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+//            }
+//        });
+
     }
 
     public void onUploadPortraitClicked(View button){
@@ -189,6 +238,13 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     public void onTakePhotoClicked(View view) {
+//        Intent goToTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(goToTakePhoto,CAMERA_REQUEST_CODE);
+        Intent goToTakePhoto = new Intent();
+        goToTakePhoto.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(goToTakePhoto,CAMERA_REQUEST_CODE);
+
+
     }
 
     public void openGallery(){
@@ -206,6 +262,16 @@ public class SignUpActivity extends AppCompatActivity {
             Log.i("forImage",imageUri.toString());
             mProfile.setImageURI(imageUri);
         }
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
+            hasImage = true;
+            Log.i("forImage","whereIsImage");
+            Bundle extras = data.getExtras();
+            Bitmap photoBitmap = (Bitmap) extras.get("data");
+//            mProfile.setImageURI(imageUri);
+            mProfile.setImageBitmap(photoBitmap);
+
+        }
+
     }
 
     public void generateYearList(){

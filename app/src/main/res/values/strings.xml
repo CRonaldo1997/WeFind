@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">We_Finder</string>
+    <string name="app_name">WeFind</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="sign_in">Sign In</string>
