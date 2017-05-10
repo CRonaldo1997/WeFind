@@ -11,28 +11,79 @@
         android:id="@+id/user_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/padding_vertical"
+        android:layout_weight="10"
         app:srcCompat="@drawable/theme"
         android:contentDescription="" />
 
-    <Button
-        android:id="@+id/like_button"
+    <LinearLayout
+        android:id="@+id/user_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_vertical"
-        android:background="@android:color/holo_red_light"
-        android:onClick="onLikeClicked"
-        android:text="@string/like" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/no_button"
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="@dimen/text_medium"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/user_age"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/user_zodiac"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_vertical"
-        android:layout_marginTop="@dimen/padding_vertical"
-        android:background="@android:color/holo_blue_light"
-        android:onClick="onDislikeClicked"
-        android:text="@string/no" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/like_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onLikeClicked"
+            android:text="@string/like"
+            app:srcCompat="@drawable/ic_thumb_up_pink_400_24dp" />
+
+        <ImageButton
+            android:id="@+id/no_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onDislikeClicked"
+            android:text="@string/no"
+            app:srcCompat="@drawable/ic_thumb_down_teal_500_24dp" />
+
+    </LinearLayout>
 
 </LinearLayout>

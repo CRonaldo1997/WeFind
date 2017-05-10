@@ -18,17 +18,36 @@
             android:id="@+id/profile_picture"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/padding_vertical"
+            android:layout_weight="2"
             app:srcCompat="@drawable/material_avatar" />
 
-        <Button
-            android:id="@+id/upload_button"
-            android:onClick="onUploadPortraitClicked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/upload_photo"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/take_photo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onTakePhotoClicked"
+                android:text="@string/take_photo"
+                app:srcCompat="@drawable/ic_add_a_photo_black_24dp"/>
+
+
+            <ImageButton
+                android:id="@+id/select_photo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onUploadPortraitClicked"
+                android:text="@string/upload_photo"
+                app:srcCompat="@drawable/ic_photo_size_select_actual_black_24dp" />
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -91,7 +110,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/padding_horizontal_small"
                 android:text="@string/year_of_birth"
-                android:textSize="@dimen/textsize_medium"/>
+                android:textSize="@dimen/text_medium"/>
 
             <Spinner
                 android:id="@+id/year_spinner"
@@ -116,7 +135,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/padding_horizontal_small"
                 android:text="@string/zodiac_sign"
-                android:textSize="@dimen/textsize_medium"/>
+                android:textSize="@dimen/text_medium"/>
 
             <Spinner
                 android:id="@+id/zodiac_spinner"
@@ -141,7 +160,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="@dimen/padding_horizontal_small"
                 android:text="@string/gender"
-                android:textSize="@dimen/textsize_medium"/>
+                android:textSize="@dimen/text_medium"/>
 
             <Spinner
                 android:id="@+id/gender_spinner"

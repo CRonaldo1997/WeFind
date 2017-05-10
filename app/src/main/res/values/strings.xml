@@ -15,4 +15,9 @@
     <string name="like">LIKE</string>
     <string name="no">NO</string>
     <string name="save">SAVE</string>
+    <string name="chat">Chat</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="message_here">Message here...</string>
+    <string name="send">Send</string>
+    <string name="send_button">Send Button</string>
 </resources>

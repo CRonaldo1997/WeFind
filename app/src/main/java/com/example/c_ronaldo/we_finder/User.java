@@ -63,7 +63,11 @@ public class User {
         username = newGender;
     }
 
-    public String getUrl() {
+    public String getUri() {
         return uri;
+    }
+
+    public void setUri(String newUri) {
+        uri = newUri;
     }
 }

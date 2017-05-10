@@ -33,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -181,28 +180,15 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        String password = mPassword.getText().toString();
-//        if (!createAccount(email, password)) {
-//            Log.d(TAG, "Create account failed.");
-//        } else {
-//            Log.d(TAG, "Create account succeeded");
-//            Intent toPassBack = getIntent();
-//            toPassBack.putExtra("email", email);
-//            toPassBack.putExtra("password", password);
-//            setResult(RESULT_OK, toPassBack);
-//
-//            Log.d(TAG, "Adding current user info to Firebase Database");
-//            upLoadToFirebase(username, email, year, zodiacSign, gender);
-//            Toast.makeText(this, "User Created on Firebase. Please sign in.",
-//                    Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
-
+        
     }
 
     public void onUploadPortraitClicked(View button){
         openGallery();
+    }
+
+
+    public void onTakePhotoClicked(View view) {
     }
 
     public void openGallery(){
@@ -347,4 +333,5 @@ public class SignUpActivity extends AppCompatActivity {
 //        userTable.child(userKey).setValue(currentUser);
         userTable.child(username).setValue(currentUser);
     }
+
 }
