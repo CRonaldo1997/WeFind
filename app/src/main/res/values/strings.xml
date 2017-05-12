@@ -17,7 +17,10 @@
     <string name="save">SAVE</string>
     <string name="chat">Chat</string>
     <string name="take_photo">Take Photo</string>
-    <string name="message_here">Message here...</string>
+    <string name="message_here">Message here…</string>
     <string name="send">Send</string>
     <string name="send_button">Send Button</string>
+    <string name="match_message">Congratulations! You are matched!</string>
+    <string name="chat_now">chat now</string>
+    <string name="chat_later">chat later</string>
 </resources>

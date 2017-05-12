@@ -21,19 +21,14 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TITLE = "WeFind";
     private final String TAG = this.getClass().getSimpleName();
-
     private static final int SIGNIN = 0;
     private static final int SIGNUP = 1;
-
     private static final int SIGNIN_INTENT_REQUEST = 0;
     private static final int SIGNUP_INTENT_REQUEST = 1;
-
-
     private EditText mEmail;
     private EditText mPassword;
     private Button mSignInButton;
     private Button mSignUpButton;
-
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -58,15 +53,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // ...
             }
         };
-
-
         mEmail = (EditText)this.findViewById(R.id.email);
         mPassword = (EditText)this.findViewById(R.id.password);
         mSignInButton = (Button) findViewById(R.id.signin_button);
         mSignInButton.setOnClickListener(this);
         mSignUpButton = (Button) findViewById(R.id.signup_button);
         mSignUpButton.setOnClickListener(this);
-
     }
 
     @Override
@@ -82,11 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-//    public void onSignUpClicked(View button){
-//        Intent goToSignUpView = new Intent(this,SignUpActivity.class);
-//        startActivity(goToSignUpView);
-//    }
 
     @Override
     public void onClick(View v) {
@@ -124,12 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.LENGTH_SHORT).show();
                             String msg = "Please check your email address and password";
                             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-//                            signedIn = false;
                         } else {
-//                            mProgress.setMessage("Signing in ...");
-//                            mProgress.show();
                             go(SIGNIN);
-//                            mProgress.dismiss();
                         }
                     }
                 });
@@ -138,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean validateForm() {
         boolean valid = true;
-
         String email = mEmail.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmail.setError("Email Address Required.");
@@ -161,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (button) {
             case SIGNIN:
                 String msg = "Signed in successfully\nWelcome!";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 //                startActivityForResult(new Intent(this, TinderActivity.class), SIGNIN_INTENT_REQUEST);
                 Intent signInIntent = new Intent(this, TinderActivity.class);
                 startActivityForResult(signInIntent, SIGNIN_INTENT_REQUEST);
